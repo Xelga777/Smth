@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "main.h"
 
 int current_array(float *array, int size) {
     if (size == 0) {

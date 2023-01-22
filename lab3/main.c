@@ -1,23 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
-extern  int input_array();
-extern int add_element(int index, float element);
-extern int delete_element(int index);
-extern int check(float x);
-extern int processing_data();
-extern int current_array(float *array, int size);
-
-int size = 0, sub_size = 0, r = 0;
-float *array, *sub_array;
+#include "main.h"
 
 int main() {
+    int size = 0, sub_size = 0, r = 0;
+    float *array = NULL, *sub_array = NULL;
+
     int command, index;
     float element;
 
     printf("инициализация массива\n");
-    r = input_array();
+    r = input_array(&array, &size);
 
     while (1) {
         printf("Команды:\n");
@@ -38,7 +32,7 @@ int main() {
         if (command == 1) {
             free(array);
             free(sub_array);
-            r = input_array();
+            r = input_array(&array, &size);
         } else if (command == 2) {
             printf("Введите индекс, по которому будет вставлен элемент: ");
             while ((scanf("%d", &index) == 0) || (index <= 0)) {
@@ -50,16 +44,16 @@ int main() {
                 printf("Неверное значение.\nВведите значение %d-го элемента: ", index);
                 scanf("%*c");
             }
-            r = add_element(index, element);
+            r = add_element(&array, &size, index, element);
         } else if (command == 3) {
             printf("Введите индекс, по которому будет удален элемент: ");
             while ((scanf("%d", &index) == 0) || (index <= 0) || (index > size)) {
                 printf("Неверное значение.\nВведите индекс, по которому будет удален элемент: ");
                 scanf("%*c");
             }
-            r = delete_element(index);
+            r = delete_element(&array, &size, index);
         } else if (command == 4) {
-            r = processing_data();
+            r = processing_data(&array, &sub_array, &size, &sub_size);
             printf("задача выполнена");
         } else if (command == 5) {
             printf("   исходный масив: ");
@@ -67,8 +61,8 @@ int main() {
             printf("\nвыделенный массив: ");
             r = current_array(sub_array, sub_size);
         } else {
-            free(array);
-            free(sub_array);
+            if (array) free(array);
+            if (sub_array) free(sub_array);
             break;
         }
 
